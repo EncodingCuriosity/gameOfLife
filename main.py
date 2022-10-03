@@ -5,18 +5,23 @@
 
 import os
 import time
+import platform
+
+system = platform.uname().system
+CLEAR = "cls" if system == "Windows" else "clear"
+
 
 def main():
     cols, rows = os.get_terminal_size()
-    game = Game(rows, cols, "#")
+    game = Game("#")
     glider =[[0,2], [1,2], [2,2], [2,1], [1,0]]
     game.set_start(glider)
     game.run(100)
 
 class Game:
-    def __init__(self, rows, cols, fill) -> None:
-        self.rows = rows - 1
-        self.cols = cols
+    def __init__(self, fill) -> None:
+        self.cols, self.rows = os.get_terminal_size()
+        self.rows -= 1
         self.fill = fill
         self.grid = [[" " for _ in range(self.cols)] for _ in range(self.rows)]
     
@@ -33,6 +38,7 @@ class Game:
 
     def run(self, num_steps):
         for i in range(num_steps):
+            os.system(CLEAR)
             print(self)
             time.sleep(.05)
             self.update()
